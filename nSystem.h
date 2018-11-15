@@ -109,6 +109,8 @@ void nDestroyCondition(nCondition cond); /* Destruye una condicion */
 void nWaitCondition(nCondition cond);    /* operacion Wait */
 void nSignalCondition(nCondition cond);  /* operacion Signal */
 
+/* Tarea2 */
+void nWaitTimeout(nMonitor mon, int timeout); /* Wait con timeout */
 /*************************************************************
  * E/S basica
  *************************************************************/
