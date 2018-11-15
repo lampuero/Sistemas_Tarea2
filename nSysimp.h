@@ -51,9 +51,12 @@ typedef struct Task /* Descriptor de una tarea */
 
 /* Agregar nuevos estados como STATUS_END+1, STATUS_END+2, ... */
 
+#define WAIT_MON_TIMEOUT (STATUS_END+1)
+
 #define STATUS_LIST {"READY", "ZOMBIE", "WAIT_TASK", "WAIT_REPLY", \
                      "WAIT_SEND", "WAIT_SEND_TIMEOUT", "WAIT_READ", \
-                     "WAIT_WRITE", "WAIT_SEM", "WAIT_MON", "WAIT_COND" }
+                     "WAIT_WRITE", "WAIT_SEM", "WAIT_MON", "WAIT_COND", \
+					"WAIT_MON_TIMEOUT"}
 
 /*
  * Prologo y Epilogo:
