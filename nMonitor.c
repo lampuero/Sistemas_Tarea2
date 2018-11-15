@@ -99,6 +99,12 @@ void nNotifyAll(nMonitor mon)
   while (!EmptyFifoQueue(mon->wqueue))
   {
     nTask task= (nTask)GetObj(mon->wqueue);
+	// Modificacion
+	{
+		if(task->status == WAIT_MON_TIMEOUT){
+			CancelTask(task);
+		}
+	}
     task->status= WAIT_MON;
     PushTask(mon->mqueue, task);
   }
@@ -164,3 +170,28 @@ static void ReadyFirstTask(Queue queue)
     task->status= READY;
     PushTask(ready_queue, task);
 } }
+
+void nWaitTimeout(nMonitor mon, int timeout){
+  START_CRITICAL();
+
+  if (mon->owner!=current_task)
+    nFatalError("nWait", "This thread does not own this monitor\n");
+  mon->owner= NULL;
+  current_task->status= WAIT_MON_TIMEOUT;
+  if (timeout>0){
+	  ProgramTask(timeout);
+  }
+  PutObj(mon->wqueue, current_task);
+  ReadyFirstTask(mon->mqueue);
+  ResumeNextReadyTask();
+  
+  if(QueryObj(mon->wqueue, current_task)){
+	  DeleteObj(mon->wqueue, current_task);
+	  current_task->status= WAIT_MON;
+	  PushTask(mon->mqueue, current_task);
+	  ResumeNextReadyTask();
+  }
+  mon->owner= current_task;
+
+  END_CRITICAL();
+}
