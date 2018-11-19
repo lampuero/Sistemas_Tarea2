@@ -203,4 +203,3 @@ void nWaitTimeout(nMonitor mon, int timeout)
 
   END_CRITICAL();
 }
-
